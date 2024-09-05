@@ -61,7 +61,10 @@ router.post("/login", async (req, res) => {
     const accessToken = generateToken(user.id, jwtExpiry);
     const refreshToken = generateToken(user.id, refreshTokenExpiry);
 
-    res.json({ accessToken, refreshToken });
+    // res.json({ accessToken, refreshToken });
+    // Set HTTP-only cookie without explicitly setting maxAge
+    res.cookie("accessToken", accessToken, { httpOnly: true }); // Access token will expire based on JWT settings
+    res.cookie("refreshToken", refreshToken, { httpOnly: true }); // Same for refresh token
   } catch (err) {
     console.error(err.message);
     res.status(500).send("server error");
